@@ -11,13 +11,13 @@
             <form @submit.prevent="update_profile_photo()" class="mb-4">
                 <div class="d-flex">
                     <div>
-                        <img :src="profile_image" class="rounded-circle profile-image-large">
+                        <img :src="profile_image" class="rounded-circle profile-image-large" alt="">
                         <input type="file" v-on:change="update_profile_image" ref="file_selector" accept="image/x-png,image/jpeg"  hidden>
                     </div>
                     <div class="ml-3 align-self-center">
                         <span class="text-subhead-bold"> {{ fullname }} </span><br>
                         <span class="btn-label" @click="$refs.file_selector.click()">Change photo</span>
-                        <span class="btn-label ml-3" v-show="profile_image_exists == true" @click="remove_profile_image()">Remove</span>
+                        <span class="btn-label ml-3" v-show="profile_image_exists === true" @click="remove_profile_image()">Remove</span>
                     </div>
                 </div>
             </form>
@@ -30,7 +30,7 @@
                         <span class="text-subhead">{{ $t("Basic Information") }}</span>
                     </div>
                     <div class="">
-                        <button type="submit" class="btn btn-primary" v-bind:disabled="basic_profile_form.processing == true"> <i class='fa fa-circle-notch fa-spin'  v-if="basic_profile_form.processing == true"></i> {{ $t("Save") }}</button>
+                        <button type="submit" class="btn btn-primary" v-bind:disabled="basic_profile_form.processing === true"> <i class='fa fa-circle-notch fa-spin' v-if="basic_profile_form.processing === true"></i> {{ $t("Save") }}</button>
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                         <span class="text-subhead">{{ $t("Change Password") }}</span>
                     </div>
                     <div class="">
-                        <button type="submit" class="btn btn-primary" v-bind:disabled="password_form.processing == true"> <i class='fa fa-circle-notch fa-spin'  v-if="password_form.processing == true"></i> {{ $t("Save") }}</button>
+                        <button type="submit" class="btn btn-primary" v-bind:disabled="password_form.processing === true"> <i class='fa fa-circle-notch fa-spin' v-if="password_form.processing === true"></i> {{ $t("Save") }}</button>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@
                 new_password: '',
                 new_password_confirmation : '',
 
-                profile_image_exists : (this.user.profile_image != null && this.user.profile_image != '')?true:false,
+                profile_image_exists : (this.user.profile_image != null && this.user.profile_image !== ''),
                 profile_image : this.user.profile_image_path
             }
         },
@@ -136,15 +136,15 @@
                 this.$validator.validateAll(scope).then((result) => {
                     if (result) {
                         this.basic_profile_form.processing = true;
-                        var formData = new FormData();
+                      const formData = new FormData();
 
-                        formData.append("access_token", window.settings.access_token);
+                      formData.append("access_token", window.settings.access_token);
                         formData.append("fullname", (this.fullname == null)?'':this.fullname);
                         formData.append("email", (this.email == null)?'':this.email);
                         formData.append("phone", (this.phone == null)?'':this.phone);
 
                         axios.post('/api/update_basic_profile', formData).then((response) => {
-                            if(response.data.status_code == 200) {
+                            if(response.data.status_code === 200) {
                                 this.show_response_message(response.data.msg, 'SUCCESS');
                                 
                                 setTimeout(function(){
@@ -153,8 +153,8 @@
                             }else{
                                 this.basic_profile_form.processing = false;
                                 try{
-                                    var error_json = JSON.parse(response.data.msg);
-                                    this.basic_profile_form.server_errors = this.loop_api_errors(error_json);
+                                  const error_json = JSON.parse(response.data.msg);
+                                  this.basic_profile_form.server_errors = this.loop_api_errors(error_json);
                                 }catch(err){
                                     this.basic_profile_form.server_errors = response.data.msg;
                                 }
@@ -172,15 +172,15 @@
                 this.$validator.validateAll(scope).then((result) => {
                     if (result) {
                         this.password_form.processing = true;
-                        var formData = new FormData();
+                      const formData = new FormData();
 
-                        formData.append("access_token", window.settings.access_token);
+                      formData.append("access_token", window.settings.access_token);
                         formData.append("current_password", (this.current_password == null)?'':this.current_password);
                         formData.append("new_password", (this.new_password == null)?'':this.new_password);
                         formData.append("new_password_confirmation", (this.new_password_confirmation == null)?'':this.new_password_confirmation);
 
                         axios.post('/api/update_password', formData).then((response) => {
-                            if(response.data.status_code == 200) {
+                            if(response.data.status_code === 200) {
                                 this.show_response_message(response.data.msg, 'SUCCESS');
                                 
                                 setTimeout(function(){
@@ -189,8 +189,8 @@
                             }else{
                                 this.password_form.processing = false;
                                 try{
-                                    var error_json = JSON.parse(response.data.msg);
-                                    this.password_form.server_errors = this.loop_api_errors(error_json);
+                                  const error_json = JSON.parse(response.data.msg);
+                                  this.password_form.server_errors = this.loop_api_errors(error_json);
                                 }catch(err){
                                     this.password_form.server_errors = response.data.msg;
                                 }
@@ -205,20 +205,20 @@
             },
 
             update_profile_image(){
-                
-                var file = this.$refs.file_selector.files[0];
-                var formData = new FormData();
-                formData.append("access_token", window.settings.access_token);
+
+              const file = this.$refs.file_selector.files[0];
+              const formData = new FormData();
+              formData.append("access_token", window.settings.access_token);
                 formData.append("profile_photo", file);
 
                 axios.post('/api/update_profile_image', formData).then((response) => {
                     this.processing = false;
-                    if(response.data.status_code == 200) {
+                    if(response.data.status_code === 200) {
                         location.reload();
                     }else{
                         try{
-                            var error_json = JSON.parse(response.data.msg);
-                            this.server_errors = this.loop_api_errors(error_json);
+                          const error_json = JSON.parse(response.data.msg);
+                          this.server_errors = this.loop_api_errors(error_json);
                         }catch(err){
                             this.server_errors = response.data.msg;
                         }
@@ -231,18 +231,18 @@
             },
 
             remove_profile_image(){
-                var formData = new FormData();
+              const formData = new FormData();
 
-                formData.append("access_token", window.settings.access_token);
+              formData.append("access_token", window.settings.access_token);
 
                 axios.post('/api/remove_profile_image', formData).then((response) => {
                     this.processing = false;
-                    if(response.data.status_code == 200) {
+                    if(response.data.status_code === 200) {
                         location.reload();
                     }else{
                         try{
-                            var error_json = JSON.parse(response.data.msg);
-                            this.server_errors = this.loop_api_errors(error_json);
+                          const error_json = JSON.parse(response.data.msg);
+                          this.server_errors = this.loop_api_errors(error_json);
                         }catch(err){
                             this.server_errors = response.data.msg;
                         }

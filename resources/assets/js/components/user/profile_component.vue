@@ -6,7 +6,7 @@
                 <div class="mr-auto">
                    <div class="d-flex">
                         <div>
-                            <img :src="profile_image" class="rounded-circle profile-image-large">
+                            <img :src="profile_image" class="rounded-circle profile-image-large" alt="">
                         </div>
                         <div class="ml-3 align-self-center">
                             <span class="text-subhead-bold"> {{ fullname }} </span>
@@ -14,10 +14,9 @@
                     </div>
                 </div>
                 <div class="">
-                    <a href="/edit_profile" class="btn btn-primary" v-if="slack == logged_user"> {{ $t("Edit") }}</a>
+                    <a href="/edit_profile" class="btn btn-primary" v-if="slack === logged_user"> {{ $t("Edit") }}</a>
                 </div>
             </div>
-
             <div class="mb-2">
                 <span class="text-subhead">{{ $t("Basic Information") }}</span>
             </div>
@@ -34,28 +33,25 @@
                     <label for="email">{{ $t("Phone") }}</label>
                     <p>{{ phone }}</p>
                 </div>
-            </div>
-            <div class="form-row mb-2">
                 <div class="form-group col-md-3">
                     <label for="email">{{ $t("Role") }}</label>
                     <p>{{ role }}</p>
                 </div>
             </div>
-
         </div>
     </div>
-</template>  
+</template>
 
 <script>
     'use strict';
-    
+
     export default {
         data(){
             return{
                 server_errors   : '',
                 error_class     : '',
                 processing      : false,
-                
+
                 slack           : this.user.slack,
                 email           : this.user.email,
                 fullname        : this.user.fullname,
@@ -74,7 +70,7 @@
             console.log('Profile page loaded');
         },
         methods: {
-           
+
         }
     }
 </script>
