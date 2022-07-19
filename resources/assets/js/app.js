@@ -9,7 +9,7 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+window.Vue = require('vue').default;
 
 import VeeValidate, { Validator } from 'vee-validate';
 
